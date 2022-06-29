@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 const articleSchema = new mongoose.Schema(
   {
+    //article id
+    // _id: mongoose.Schema.Types.ObjectId,
     title: {
       type: String,
       required: true,
@@ -11,6 +13,7 @@ const articleSchema = new mongoose.Schema(
     },
     link: {
       type: String,
+      // default: "article/", 
     },
     createdAt: {
       type: Date,

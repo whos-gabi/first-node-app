@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('includes/styles.ejs', {title: "My profile" })%>
+</head>
+
+<body>
+    <%- include('includes/navbar.ejs') %>
+
+
+        <!-- display all articles got from router in cards -->
+        <div class="container p-5">
+            <div class="row justify-content-center">
+                <div class="col-md-9">
+                    <h1>My Posts</h1>
+
+
+
+
+                    <% articles.forEach(function(article){ %>
+                        <div class="card w-100 text-white bg-dark mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%=article.title%>
+                                </h5>
+                                <p class="card-text">
+                                    <%=article.description%>
+                                </p>
+                                
+                                <a href="/article/<%=article._id%>" class="btn btn-danger">Delete Post</a>
+                                <a href="/article/<%=article._id%>" class="btn btn-primary">Edit Post</a>
+                                <!-- <a href="/article/<%=article._id%>" class="btn btn-primary">Share Post</a> -->
+                            </div>
+                        </div>
+                        <% }); %>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <%- include('includes/scripts.ejs') %>
+
+</body>
+
+</html>

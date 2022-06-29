@@ -1,23 +1,23 @@
 import express from "express";
+import fetch from "node-fetch";
 import dotenv from "dotenv";
 import { Article } from "../model/data.model.js";
-dotenv.config()
-const api_key=process.env.MONGODB_URL;
+dotenv.config();
+const api_key = process.env.NEWS_API_KEY;
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const articles = await Article.find().sort({ createdAt: "desc" });
+  // const articles = await Article.find().sort({ createdAt: "desc" });
   //   const categories = await Category.find();
-//   var url =
-//     "https://newsapi.org/v2/top-headlines?" + "sources=bbc-news&" + "apiKey=" + api_key;
-//     //call url and console log data
-//     fetch(url)
-//     .then(res => res.json())
-//     .then(data => console.log(data))
-//     .catch(err => console.log(err));
+  var url =
+    "https://newsapi.org/v2/everything?q=Apple&sortBy=popularity&apiKey=" +
+    api_key;
+  //get dat afrom api in node
+  const response = await fetch(url);
+  const data = await response.json();
 
-
-    res.render("index", { articles: articles });
+  // console.log(data);
+  res.render("index", { data: data.articles });
 });
 
 router.get("/new", async (req, res) => {
@@ -26,7 +26,11 @@ router.get("/new", async (req, res) => {
 });
 //get /profile render profile.ejs
 router.get("/profile", async (req, res) => {
-  res.render("profile");
+  // parse all artilces from db
+  const articles = await Article.find();
+  // render profile.ejs
+  // console.log(articles);
+  res.render("profile", { articles: articles });
 });
 
 router.get("/edit/:id", async (req, res) => {
@@ -87,17 +91,16 @@ router.post("/", async (req, res) => {
   }
 });
 
-// router.post("/nc", async (req, res) => {
-//   let category = new Category({
-//     name: req.body.name,
-//   });
-//   try {
-//     category = await category.save();
-//     res.redirect("/");
-//   } catch (error) {
-//     res.redirect("/");
-//   }
-// });
+router.post("/new-article", async (req, res) => {
+  let article = new Article(req.body);
+  try {
+    article = await article.save();
+    res.redirect("/profile");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/");
+  }
+});
 
 router.patch("/:id", async (req, res) => {
   try {
