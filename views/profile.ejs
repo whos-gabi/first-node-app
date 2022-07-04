@@ -19,22 +19,72 @@
 
 
                     <% articles.forEach(function(article){ %>
-                        <div class="card w-100 text-white bg-dark mb-3">
-                            <div class="card-body">
+                        <div class="card w-100 text-white bg-dark mb-3" id="<%=article.id%>">
+                            <div class="card-body" id="article">
                                 <h5 class="card-title">
                                     <%=article.title%>
                                 </h5>
                                 <p class="card-text">
                                     <%=article.description%>
                                 </p>
-                                
-                                <a href="/article/<%=article._id%>" class="btn btn-danger">Delete Post</a>
-                                <a href="/article/<%=article._id%>" class="btn btn-primary">Edit Post</a>
-                                <!-- <a href="/article/<%=article._id%>" class="btn btn-primary">Share Post</a> -->
+
+                                <a href="<%=article.link%>" id="pathToLink<%=article.id%>">
+                                    <%=article.link%>
+                                </a>
+                            </div>
+                            <!-- edit article form  -->
+                            <div class="card-body" id="form<%=article.id%>" hidden>
+                                <form action="/edit/<%=article._id%>?_method=PATCH" method="post">
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" class="form-control" id="title" name="title"
+                                            placeholder="Title" value="<%= article.title %>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="body">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="3"
+                                            required><%= article.description %> </textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="link">Link</label>
+                                        <input value="<%= article.link %>" type="text" class="form-control" id="link"
+                                            name="link" placeholder="https://">
+                                    </div>
+                                    <button type="submit" class="btn btn-success my-2 w-100">Submit</button>
+
+                                    <button id="cancelEdit<%=article.id%>"
+                                        class="btn btn-primary my-2 w-100">Cancel</button>
+
+                                </form>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row justify-content-center">
+                                    <div class="col-6">
+                                        <form action="/delete/<%=article.id%>?_method=DELETE" method="post">
+                                            <button class="btn btn-danger w-100">Delete Post</button>
+                                        </form>
+                                    </div>
+                                    <div class="col-6">
+                                        <button id="editPost<%=article.id%>" class="btn btn-primary w-100">Edit Post</button>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                        <% }); %>
 
+                        <script>
+                            //if edit post clicked then show the form
+                            document.getElementById("editPost<%=article.id%>").addEventListener("click", function () {
+                                document.getElementById("form<%=article.id%>").hidden = !document.getElementById("form<%=article.id%>").hidden;
+                            });
+                            document.getElementById("cancelEdit<%=article.id%>").addEventListener("click", function () {
+                                form.hidden = !form.hidden;
+                            });
+
+
+                        </script>
+                        <% }); %>
 
 
 

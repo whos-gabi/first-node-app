@@ -24,6 +24,7 @@ const articleSchema = new mongoose.Schema(
     // },
   },
   { collection: "articles" }
+  
 );
 
 export const Article = mongoose.model("Article", articleSchema);

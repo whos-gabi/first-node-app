@@ -60,19 +60,6 @@ router.get("/read/:id", async (req, res) => {
   }
 });
 
-// router.get('/:name',async (req,res)=>{
-//     const categories= await Category.find()
-//     try {
-//         const articles= await Article.find({category:req.params.name}).sort({createdAt:"desc"})
-//         let current=req.params.name;
-//         let currentId=await Category.find({name:current});
-//         currentId=String(currentId[0]._id);
-//         res.render('category',{articles:articles,categories:categories,current:current,currentId:currentId})
-//     } catch (error) {
-//         res.render('error',{categories:categories})
-//     }
-// })
-
 router.post("/", async (req, res) => {
   let article = new Article({
     title: req.body.title,
@@ -102,63 +89,31 @@ router.post("/new-article", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/edit/:id", async (req, res) => {
+  // console.log(req.body);
   try {
     const article = await Article.findOneAndUpdate(
       { _id: req.params.id },
       req.body
     );
+    //?update=true
     if (article) {
-      res.redirect(`/read/${article._id}`);
+      // res.redirect(`/profile/`);
+      res.redirect(`/profile/#${article._id}`);
     } else res.status(404).send();
   } catch (error) {
-    // const categories = await Category.find();
     res.render("error");
   }
 });
 
-// router.patch("/category/:id", async (req, res) => {
-//   try {
-//     const currentCategory = await Category.find({ _id: req.params.id });
-//     const currentName = currentCategory[0].name;
-//     const category = await Category.findOneAndUpdate(
-//       { _id: req.params.id },
-//       req.body
-//     );
-//     if (category) {
-//       let articles = await Article.find({ category: currentName });
-//       for (let i = 0; i < articles.length; i++) {
-//         articles[i].category = String(req.body.name);
-//         articles[i] = await articles[i].save();
-//       }
-//       res.redirect("/");
-//     } else res.status(404).send();
-//   } catch (error) {
-//     const categories = await Category.find();
-//     res.render("error", { categories: categories });
-//   }
-//   /*const categories= await Category.find()
-//     try {
-//         const category=await Category.findOneAndUpdate({_id:req.params.id},req.params)
-//         for(let i=0;i<=categories.length;i++){
-//             const article=await Article.findOneAndUpdate({category:category.name},req.params)
-//         }
-//         if(category){
-//             res.redirect('/')
-//         }
-//         else{
-//             res.status(404)
-//         }
-//     } catch (error) {
-//         res.render('error',{categories:categories})
-//     }*/
-// });
 
-router.delete("/:id", async (req, res) => {
+
+router.delete("/delete/:id", async (req, res) => {
+  // console.log(req.params.id);
   try {
     const article = await Article.findOneAndDelete({ _id: req.params.id });
     if (article) {
-      res.redirect("/");
+      res.redirect("/profile");
     } else {
       res.status(404);
     }
@@ -168,23 +123,5 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// router.delete("/category/:id", async (req, res) => {
-//   const categories = await Category.find();
-//   try {
-//     const category = await Category.findOneAndDelete({ _id: req.params.id });
-//     for (let i = 0; i < categories.length; i++) {
-//       const article = await Article.findOneAndDelete({
-//         category: category.name,
-//       });
-//     }
-//     if (category) {
-//       res.redirect("/");
-//     } else {
-//       res.status(404);
-//     }
-//   } catch (error) {
-//     res.render("error", { categories: categories });
-//   }
-// });
 
 export default router;
